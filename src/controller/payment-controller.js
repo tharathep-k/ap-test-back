@@ -19,9 +19,25 @@ exports.createPayment = async (req, res, next) => {
 
 exports.getAllData = async (req, res, next) => {
   try {
-    const data = await prisma.payment.findMany()
+    const data = await prisma.payment.findMany();
 
-    res.status(200).json(data)
+    res.status(200).json(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.filterData = async (req, res, next) => {
+  try {
+    const data = req.query;
+    const province = data.province;
+    console.log(province);
+
+    const newData = await prisma.payment.findMany({
+      where: { province: province },
+    });
+
+    res.status(200).json(newData);
   } catch (error) {
     next(error);
   }
