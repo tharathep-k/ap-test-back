@@ -30,11 +30,23 @@ exports.getAllData = async (req, res, next) => {
 exports.filterData = async (req, res, next) => {
   try {
     const data = req.query;
-    const province = data.province;
-    console.log(province);
+    // const province = data.province;
+    console.log(data);
 
     const newData = await prisma.payment.findMany({
-      where: { province: province },
+      where: {
+        OR: [
+          {
+            province: data.province,
+          },
+          {
+            district: data.district,
+          },
+          {
+            subdistrict: data.subdistrict,
+          },
+        ],
+      },
     });
 
     res.status(200).json(newData);
